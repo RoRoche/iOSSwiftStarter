@@ -16,31 +16,30 @@ Although it's simple, it gathers some classical jobs when writing an application
 
 Let's discover what's hiding under the hood!
 
-### [[Dependency management]]
+### [Dependency management](https://github.com/RoRoche/iOSSwiftStarter/wiki/Dependency-management)
 
-### [[Consuming REST API]]
+### [Consuming REST API](https://github.com/RoRoche/iOSSwiftStarter/wiki/Consuming-REST-API)
 
-### [[Managing jobs]]
+### [Managing jobs](https://github.com/RoRoche/iOSSwiftStarter/wiki/Managing-jobs)
 
-### [[Communication between components with passing data]]
+### [Communication between components with passing data](https://github.com/RoRoche/iOSSwiftStarter/wiki/Communication-between-components-with-passing-data)
 
-### [[Data persistence]]
+### [Data persistence](https://github.com/RoRoche/iOSSwiftStarter/wiki/Data-persistence)
 
-### [[Make thinner view controllers]]
+### [Make thinner view controllers](https://github.com/RoRoche/iOSSwiftStarter/wiki/Make-thinner-view-controllers)
 
-### [[The VIPER architecture]]
+### [The VIPER architecture](https://github.com/RoRoche/iOSSwiftStarter/wiki/The-VIPER-architecture)
 
-### [[Unit testing]]
+### [Unit testing](https://github.com/RoRoche/iOSSwiftStarter/wiki/Unit-testing)
 
 ### Conclusion
 
-All these tools/libraries combined together lead us to a clear, clean, reliable and testable project template where we can add and maintain features (i.e. modules) easily, in a very intelligible way. 
-What we've got is a robust arsenal of components that are interchangeable if needed.
+All these tools/libraries combined together lead us to a clear, clean, reliable and testable project template where we can add and maintain features (i.e. modules) easily, in a very intelligible way. What we've got is a robust arsenal of components that are interchangeable if needed.
 
-### [[Relevant libraries]]
+### [Relevant libraries](https://github.com/RoRoche/iOSSwiftStarter/wiki/Relevant-libraries)
 
-### [[Relevant tools]]
+### [Relevant tools](https://github.com/RoRoche/iOSSwiftStarter/wiki/Relevant-tools)
 
-### [[Relevant resources]]
+### [Relevant resources](https://github.com/RoRoche/iOSSwiftStarter/wiki/Relevant-resources)
 
-### [[Bibliography]]
+### [Bibliography](https://github.com/RoRoche/iOSSwiftStarter/wiki/Bibliography)
