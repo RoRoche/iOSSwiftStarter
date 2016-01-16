@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1509" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="57" id="pBs-a5-Oul" customClass="RepoCell" customModule="POC" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="57"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="pBs-a5-Oul" id="d1g-7P-wuv">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="56"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vYC-kk-cMF">
+                        <rect key="frame" x="59" y="5" width="253" height="46"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Git_icon" translatesAutoresizingMaskIntoConstraints="NO" id="eQM-bI-1YU">
+                        <rect key="frame" x="5" y="5" width="46" height="46"/>
+                    </imageView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="eQM-bI-1YU" firstAttribute="top" secondItem="d1g-7P-wuv" secondAttribute="topMargin" constant="-3" id="0Ra-bT-HH5"/>
+                    <constraint firstItem="vYC-kk-cMF" firstAttribute="leading" secondItem="eQM-bI-1YU" secondAttribute="trailing" constant="8" id="0yG-6N-gCh"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="vYC-kk-cMF" secondAttribute="bottom" constant="-3" id="J6a-Dz-Acu"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="vYC-kk-cMF" secondAttribute="trailing" id="bXn-01-cMB"/>
+                    <constraint firstItem="eQM-bI-1YU" firstAttribute="leading" secondItem="d1g-7P-wuv" secondAttribute="leadingMargin" constant="-3" id="ftK-D6-RBo"/>
+                    <constraint firstItem="vYC-kk-cMF" firstAttribute="top" secondItem="d1g-7P-wuv" secondAttribute="topMargin" constant="-3" id="iPM-qA-b5d"/>
+                    <constraint firstItem="vYC-kk-cMF" firstAttribute="leading" secondItem="d1g-7P-wuv" secondAttribute="leadingMargin" constant="51" id="lgR-eF-fGd"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="eQM-bI-1YU" secondAttribute="bottom" constant="-3" id="ouR-TW-50k"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="imageViewAvatar" destination="eQM-bI-1YU" id="2Ui-ob-W3u"/>
+                <outlet property="labelName" destination="vYC-kk-cMF" id="ecR-p0-eCP"/>
+            </connections>
+            <point key="canvasLocation" x="113" y="-138.5"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="Git_icon" width="1024" height="1024"/>
+    </resources>
+</document>

@@ -1,0 +1,6 @@
+framework module ReactKit {
+  umbrella header "ReactKit-umbrella.h"
+
+  export *
+  module * { export * }
+}

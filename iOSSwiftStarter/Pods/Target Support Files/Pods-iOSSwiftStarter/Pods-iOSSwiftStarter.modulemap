@@ -1,0 +1,6 @@
+framework module Pods_iOSSwiftStarter {
+  umbrella header "Pods-iOSSwiftStarter-umbrella.h"
+
+  export *
+  module * { export * }
+}
