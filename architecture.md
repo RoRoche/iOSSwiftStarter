@@ -1212,6 +1212,8 @@ Swift Programming Language.
 
 > Better ways to structure apps
 
+### A robust multi-environment build setup: <http://www.theappbusiness.com/blog/a-robust-multi-environment-build-setup>
+
 ## Bibliography
 
 * ActiveRecord pattern:
