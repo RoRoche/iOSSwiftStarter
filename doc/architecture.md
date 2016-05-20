@@ -1,6 +1,6 @@
 # Little stories about an iOS application architecture in Swift
 
-![Swift logo](https://raw.githubusercontent.com/RoRoche/iOSSwiftStarter/master/assets/logo_swift.png)
+![Swift logo](./assets/logo_swift.png)
 
 By writing this paper, my goal is to describe how I came up with the iOS app architecture I suggest.
 It's a step by step writing to follow the reasons bringing me to set up the different components I chose.
@@ -21,7 +21,7 @@ Let's discover what's hiding under the hood!
 
 To manage the dependencies to various tools and libraries our project will rely on, I chose to use [CocoaPods](https://cocoapods.org/) .
 
-![CocoaPods logo](https://raw.githubusercontent.com/RoRoche/iOSSwiftStarter/master/assets/logo_cocoapods.png)
+![CocoaPods logo](./assets/logo_cocoapods.png)
 
 First of all, I had to install it via:
 
@@ -68,7 +68,7 @@ open {{Project_Name}}.xcworkspace
 
 To achieve HTTP networking in Swift, I chose to use one of the most popular libraries: [Alamofire](https://github.com/Alamofire/Alamofire).
 
-![Alamofire logo](https://raw.githubusercontent.com/RoRoche/iOSSwiftStarter/master/assets/logo_alamofire.png)
+![Alamofire logo](./assets/logo_alamofire.png)
 
 Alamofire
  
@@ -374,7 +374,7 @@ The `NSNotification` concept in iOS is interesting by itself. Through the `NSNot
 
 Personally, I have been using it for many years now. Nevertheless, I'd like to have a more fluent syntax to set up my notifications and their observer(s). To solve this point, I found the following library: [Kugel](https://github.com/TakeScoop/Kugel).
 
-![Kugel logo](https://raw.githubusercontent.com/RoRoche/iOSSwiftStarter/master/assets/logo_kugel.png)
+![Kugel logo](./assets/logo_kugel.png)
 
 Just what I need: 
 
@@ -682,7 +682,7 @@ This section is mainly based on the following article [<https://www.objc.io/issu
 
 > VIPER is an application of [Clean Architecture](https://blog.8thlight.com/uncle-bob/2012/08/13/the-clean-architecture.html) to iOS apps. The word VIPER is a backronym for View, Interactor, Presenter, Entity, and Routing.
 
-![VIPER scheme](https://raw.githubusercontent.com/RoRoche/iOSSwiftStarter/master/assets/scheme_viper.jpg)
+![VIPER scheme](./assets/scheme_viper.jpg)
 
 The first assessments we could establish after looking at Apple’s ViewController design are the following:
 
@@ -802,7 +802,7 @@ Following POP guidelines, we'll be able to test such piece of code easily by moc
 
 Let's talk about testing now. Here I introduced two coupled libraries: [Nimble](https://github.com/Quick/Nimble) (for fluent assertions API) and [Quick](https://github.com/Quick/Quick) (to write tests in a BDD way).
 
-![Quick logo](https://raw.githubusercontent.com/RoRoche/iOSSwiftStarter/master/assets/logo_quick.png)
+![Quick logo](./assets/logo_quick.png)
 
 I'll present them through a concrete test case of the `ListRepoModuleInteractor` class.
 
@@ -993,226 +993,317 @@ What we've got is a robust arsenal of components that are interchangeable if nee
 
 ## Relevant libraries
 
-### Kingfisher: <https://github.com/onevcat/Kingfisher>
+* Kingfisher
+	
+	> A lightweight and pure Swift implemented library for downloading and caching image from the web.
+	
+	* <https://github.com/onevcat/Kingfisher>
+	
+	![Kingfisher logo](./assets/logo_kingfisher.png)
 
-> A lightweight and pure Swift implemented library for downloading and caching image from the web.
+* Async
+	
+	> Syntactic sugar in Swift for asynchronous dispatches in Grand Central Dispatch ([GCD](https://developer.apple.com/library/ios/documentation/Performance/Reference/GCD_libdispatch_Ref/index.html))
+	
+	* <https://github.com/duemunk/Async>
 
-![Kingfisher logo](https://raw.githubusercontent.com/RoRoche/iOSSwiftStarter/master/assets/logo_kingfisher.png)
+* Dollar.swift
+	
+	> A functional tool-belt for Swift Language similar to Lo-Dash or Underscore.js in Javascript <http://www.dollarswift.org>
+	
+	* <https://github.com/ankurp/Dollar.swift>
 
-### Async: <https://github.com/duemunk/Async>
+* ExSwift
+	
+	> A set of Swift extensions for standard types and classes.
+	
+	* <https://github.com/pNre/ExSwift>
 
-> Syntactic sugar in Swift for asynchronous dispatches in Grand Central Dispatch ([GCD](https://developer.apple.com/library/ios/documentation/Performance/Reference/GCD_libdispatch_Ref/index.html))
+* netfox
+	
+	> A lightweight, one line setup, iOS network debugging library!
+	
+	* <https://github.com/kasketis/netfox>
+	
+	![netfox logo](./assets/logo_netfox.png)
 
-### Dollar.swift: <https://github.com/ankurp/Dollar.swift>
+* QorumLogs
+	
+	> Swift Logging Utility for Xcode & Google Docs
+	
+	* <https://github.com/goktugyil/QorumLogs>
 
-> A functional tool-belt for Swift Language similar to Lo-Dash or Underscore.js in Javascript <http://www.dollarswift.org>
+* SnapKit
+	
+	> A Swift Autolayout DSL for iOS & OS X <http://snapkit.io>
+	
+	* <https://github.com/SnapKit/SnapKit>
+	
+	![SnapKit logo](./assets/logo_snapkit.png)
 
-### ExSwift: <https://github.com/pNre/ExSwift>
+* PKHUD
+	
+	> A Swift based reimplementation of the Apple HUD (Volume, Ringer, Rotation,...) for iOS 8.
+	
+	* <https://github.com/pkluz/PKHUD>
+	
+	![PKHUD logo](./assets/logo_pkhud.png)
 
-> A set of Swift extensions for standard types and classes.
+* StatefulViewController
+	
+	> Placeholder views based on content, loading, error or empty states
+	
+	* <https://github.com/aschuch/StatefulViewController>
 
-### netfox: <https://github.com/kasketis/netfox>
+* UIColor+Hex, now Swift.
+	
+	> Convenience method for creating autoreleased color using RGBA hex string.
+	
+	* <https://github.com/yeahdongcn/UIColor-Hex-Swift>
 
-> A lightweight, one line setup, iOS network debugging library!
+* AppVersionMonitor
+	
+	> Monitor iOS app version easily.
+	
+	* <https://github.com/muukii/AppVersionMonitor>
 
-![netfox logo](https://raw.githubusercontent.com/RoRoche/iOSSwiftStarter/master/assets/logo_netfox.png)
+* KeyboardObserver
+	
+	> Monitor iOS app version easily.
+	
+	* <https://github.com/morizotter/KeyboardObserver>
 
-### QorumLogs: <https://github.com/goktugyil/QorumLogs>
+* Eureka
+	
+	> Elegant iOS form builder in Swift 2
+	
+	* <https://github.com/xmartlabs/Eureka>
+	
+	![Eureka logo](./assets/logo_eureka.png)
 
-> Swift Logging Utility for Xcode & Google Docs
+* Former
+	
+	> Former is a fully customizable Swift2 library for easy creating UITableView based form.
+	
+	* <https://github.com/ra1028/Former>
+	
+	![Former logo](./assets/logo_former.png)
 
-### SnapKit: <https://github.com/SnapKit/SnapKit>
+* SwiftyUserDefaults 2.0
+	
+	> Statically-typed NSUserDefaults <http://radex.io/swift/nsuserdefaults/static>
+	
+	* <https://github.com/radex/SwiftyUserDefaults>
 
-> A Swift Autolayout DSL for iOS & OS X <http://snapkit.io>
+* SwiftKeychainWrapper
+	
+	> A simple static wrapper for the iOS Keychain to allow you to use it in a similar fashion to user defaults. Written in Swift.
+	
+	* <https://github.com/jrendel/SwiftKeychainWrapper>
 
-![SnapKit logo](https://raw.githubusercontent.com/RoRoche/iOSSwiftStarter/master/assets/logo_snapkit.png)
+* CryptoSwift
+	
+	> Crypto related functions and helpers for Swift implemented in Swift programming language <http://krzyzanowskim.com>
+	
+	* <https://github.com/krzyzanowskim/CryptoSwift>
 
-### PKHUD: <https://github.com/pkluz/PKHUD>
+* Prephirences
+	
+	> Prephirences is a Swift library that provides useful protocols and convenient methods to manage application preferences, configurations and app-state.
+	
+	* <https://github.com/phimage/Prephirences>
+	
+	![Prephirences logo](./assets/logo_prephirences.png)
 
-> A Swift based reimplementation of the Apple HUD (Volume, Ringer, Rotation,…) for iOS 8.
+* CryptoPrephirences
+	
+	> Add some encryption to your sensitive preferences
+	
+	* <https://github.com/phimage/CryptoPrephirences>
 
-![PKHUD logo](https://raw.githubusercontent.com/RoRoche/iOSSwiftStarter/master/assets/logo_pkhud.png)
+* Validator
+	
+	> Drop in user input validation for your iOS apps.
+	
+	* <https://github.com/adamwaite/Validator>
 
-### StatefulViewController: <https://github.com/aschuch/StatefulViewController>
+* Gaikan
+	
+	> Declarative view styling in Swift. Inspired by CSS modules.
+	
+	* <https://github.com/akane/Gaikan>
+	
+	![Gaikan logo](./assets/logo_gaikan.png)
 
-> Placeholder views based on content, loading, error or empty states
+* TRON
+	
+	> Lightweight network abstraction layer, written on top of Alamofire
+	
+	* <https://github.com/MLSDev/TRON>
+	
+	![TRON logo](./assets/logo_tron.png)
 
-### UIColor+Hex, now Swift.: <https://github.com/yeahdongcn/UIColor-Hex-Swift>
+* BNR Core Data Stack
+	
+	> The Big Nerd Ranch Core Data Stack
+	
+	* <https://github.com/bignerdranch/CoreDataStack>
 
-> Convenience method for creating autoreleased color using RGBA hex string.
+* Duration
+	
+	> A simple Swift package for measuring and reporting the time taken for operations
+	
+	* <https://github.com/SwiftStudies/Duration>
 
-### AppVersionMonitor: <https://github.com/muukii/AppVersionMonitor>
+* EasyPeasy
+	
+	> Auto Layout made easy
+	
+	* <https://github.com/nakiostudio/EasyPeasy>
+	
+	![EasyPeasy logo](./assets/logo_easypeasy.png)
 
-> Monitor iOS app version easily.
-
-### KeyboardObserver: <https://github.com/morizotter/KeyboardObserver>
-
-> Monitor iOS app version easily.
-
-### Eureka: <https://github.com/xmartlabs/Eureka>
-
-> Elegant iOS form builder in Swift 2
-
-![Eureka logo](https://raw.githubusercontent.com/RoRoche/iOSSwiftStarter/master/assets/logo_eureka.png)
-
-### Former: <https://github.com/ra1028/Former>
-
-> Former is a fully customizable Swift2 library for easy creating UITableView based form.
-
-![Former logo](https://raw.githubusercontent.com/RoRoche/iOSSwiftStarter/master/assets/logo_former.png)
-
-### SwiftyUserDefaults 2.0: <https://github.com/radex/SwiftyUserDefaults>
-
-> Statically-typed NSUserDefaults <http://radex.io/swift/nsuserdefaults/static>
-
-### SwiftKeychainWrapper: <https://github.com/jrendel/SwiftKeychainWrapper>
-
-> A simple static wrapper for the iOS Keychain to allow you to use it in a similar fashion to user defaults. Written in Swift.
-
-### CryptoSwift: <https://github.com/krzyzanowskim/CryptoSwift>
-
-> Crypto related functions and helpers for Swift implemented in Swift programming language <http://krzyzanowskim.com>
-
-### Prephirences: <https://github.com/phimage/Prephirences>
-
-> Prephirences is a Swift library that provides useful protocols and convenient methods to manage application preferences, configurations and app-state.
-
-![Prephirences logo](https://raw.githubusercontent.com/RoRoche/iOSSwiftStarter/master/assets/logo_prephirences.png)
-
-### CryptoPrephirences: <https://github.com/phimage/CryptoPrephirences>
-
-> Add some encryption to your sensitive preferences
-
-### Validator: <https://github.com/adamwaite/Validator>
-
-> Drop in user input validation for your iOS apps.
-
-### Gaikan: <https://github.com/akane/Gaikan>
-
-> Declarative view styling in Swift. Inspired by CSS modules.
-
-![Gaikan logo](https://raw.githubusercontent.com/RoRoche/iOSSwiftStarter/master/assets/logo_gaikan.png)
-
-### TRON: <https://github.com/MLSDev/TRON>
-
-> Lightweight network abstraction layer, written on top of Alamofire
-
-![TRON logo](https://raw.githubusercontent.com/RoRoche/iOSSwiftStarter/master/assets/logo_tron.png)
-
-### BNR Core Data Stack: <https://github.com/bignerdranch/CoreDataStack>
-
-> The Big Nerd Ranch Core Data Stack
-
-### Duration: <https://github.com/SwiftStudies/Duration>
-
-> A simple Swift package for measuring and reporting the time taken for operations
-
-### EasyPeasy: <https://github.com/nakiostudio/EasyPeasy>
-
-> Auto Layout made easy
-
-![EasyPeasy logo](https://raw.githubusercontent.com/RoRoche/iOSSwiftStarter/master/assets/logo_easypeasy.png)
-
-### Palau: <https://github.com/symentis/Palau>
-
-> NSUserDefaults with Wings!
-
-![Palau logo](https://raw.githubusercontent.com/RoRoche/iOSSwiftStarter/master/assets/logo_palau.png)
-
+* Palau
+	
+	> NSUserDefaults with Wings!
+	
+	* <https://github.com/symentis/Palau>
+	
+	![Palau logo](./assets/logo_palau.png)
 
 ## Relevant tools
 
-### SwiftGen: <https://github.com/AliSoftware/SwiftGen>
+* SwiftGen
+	
+	> A collection of Swift tools to generate Swift code (enums for your assets, storyboards, Localizable.strings, ...)
+	
+	* <https://github.com/AliSoftware/SwiftGen>
 
-> A collection of Swift tools to generate Swift code (enums for your assets, storyboards, Localizable.strings, ...)
+* xcres
+	
+	> xcres searches your Xcode project for resources
+	
+	* <https://github.com/mrackwitz/xcres>
+	
+	![xcres logo](./assets/logo_xcres.png)
 
-### xcres: <https://github.com/mrackwitz/xcres>
+* Boa
+	
+	> Boa is a simple Ruby gem to generate VIPER projects and modules
+	
+	* <https://github.com/team-supercharge/boa>
 
-> xcres searches your Xcode project for resources
+* Viper Module Generator
+	
+	> Gem to generate VIPER modules to use them in your Objective-C/Swift projects
+	
+	* <https://github.com/teambox/viper-module-generator>
 
-![xcres logo](https://raw.githubusercontent.com/RoRoche/iOSSwiftStarter/master/assets/logo_xcres.png)
+* cocoapods-clean
+	
+	> cocoapods plugin. Remove Podfile.lock, Pods/ and *.xcworkspace.
+	
+	* <https://github.com/BendingSpoons/cocoapods-clean>
 
-### Boa: <https://github.com/team-supercharge/boa>
-
-> Boa is a simple Ruby gem to generate VIPER projects and modules
-
-### Viper Module Generator: <https://github.com/teambox/viper-module-generator>
-
-> Gem to generate VIPER modules to use them in your Objective-C/Swift projects
-
-### cocoapods-clean: <https://github.com/BendingSpoons/cocoapods-clean>
-
-> cocoapods plugin. Remove Podfile.lock, Pods/ and *.xcworkspace.
-
-### ViewMonitor: <https://github.com/daisuke0131/ViewMonitor>
-
-> ViewMonitor can measure view positions with accuracy.
-
-![ViewMonitor logo](https://raw.githubusercontent.com/RoRoche/iOSSwiftStarter/master/assets/logo_viewmonitor.png)
+* ViewMonitor
+	
+	> ViewMonitor can measure view positions with accuracy.
+	
+	* <https://github.com/daisuke0131/ViewMonitor>
+	
+	![ViewMonitor logo](./assets/logo_viewmonitor.png)
 
 ## Relevant resources
 
-### Design Patterns implemented in Swift 2: <https://github.com/ochococo/Design-Patterns-In-Swift>
+* Design Patterns implemented in Swift 2
+	
+	> Design Patterns implemented in Swift
+	
+	* <https://github.com/ochococo/Design-Patterns-In-Swift>
 
-> Design Patterns implemented in Swift
+* Swift Toolbox
+	
+	> Swift toolbox is a community-supported catalog of iOS and OSX libraries written in the Swift Programming Language.
+	
+	* <http://www.swifttoolbox.io/>
+	
+	![Swift Toolbox logo](./assets/logo_swifttoolbox.png)
 
-### Swift Toolbox: <http://www.swifttoolbox.io/>
+* cocoacontrols
+	
+	* <https://www.cocoacontrols.com/>
+	
+	![cocoacontrols logo](./assets/logo_cocoacontrols.png)
 
-> Swift toolbox is a community-supported catalog 
-of iOS and OSX libraries written in the 
-Swift Programming Language.
+* IBM Swift Package Catalog
+	
+	* <https://swiftpkgs.ng.bluemix.net/>
 
-![Swift Toolbox logo](https://raw.githubusercontent.com/RoRoche/iOSSwiftStarter/master/assets/logo_swifttoolbox.png)
+* iOS Cookies
+	
+	> A hand curated collection of iOS libraries written in Swift
+	
+	* <http://www.ioscookies.com/>
+	
+	![iOS Cookies logo](./assets/logo_ioscookies.png)
 
-### cocoacontrols: <https://www.cocoacontrols.com/>
+* awesome-swift
+	
+	> A curated list of awesome Swift frameworks, libraries and software.
+	
+	* <https://github.com/Wolg/awesome-swift>
 
-![cocoacontrols logo](https://raw.githubusercontent.com/RoRoche/iOSSwiftStarter/master/assets/logo_cocoacontrols.png)
+* awesome-swift
+	
+	> A collaborative list of awesome swift resources. Feel free to contribute!
+	
+	* <https://github.com/matteocrippa/awesome-swift>
 
-### IBM Swift Package Catalog: <https://swiftpkgs.ng.bluemix.net/>
+* CodePath iOS Guides
+	
+	* <http://guides.codepath.com/ios>
 
-### iOS Cookies: <http://www.ioscookies.com/>
+	![CodePath logo](./assets/logo_codepath.png)
 
-> A hand curated collection of iOS libraries written in Swift
+* iOS Good Practices
+	
+	> Good ideas for iOS development, by Futurice developers. <http://www.futurice.com>
+	
+	* <https://github.com/futurice/ios-good-practices>
 
-![iOS Cookies logo](https://raw.githubusercontent.com/RoRoche/iOSSwiftStarter/master/assets/logo_ioscookies.png)
+	![futurice logo](./assets/logo_futurice.png)
 
-### awesome-swift: <https://github.com/Wolg/awesome-swift>
+* Clean Swift
+	
+	* <http://clean-swift.com/>
 
-> A curated list of awesome Swift frameworks, libraries and software.
+* Awesome-Swift-Education
+	
+	> All the resources for Learning About Swift
+	
+	* <https://github.com/hsavit1/Awesome-Swift-Education>
 
-### awesome-swift: <https://github.com/matteocrippa/awesome-swift>
+* Awesome-Apple
+	
+	> An opinionated, curated list of awesome libraries, plugins, and resources for Apple platform development
+	
+	* <https://github.com/joeljfischer/awesome-apple>
 
-> A collaborative list of awesome swift resources. Feel free to contribute!
+* The Official raywenderlich.com Swift Style Guide
+	
+	> The official Swift style guide for raywenderlich.com.
+	
+	* <https://github.com/raywenderlich/swift-style-guide>
 
-### CodePath iOS Guides: <http://guides.codepath.com/ios>
+* ios-architecture
+	
+	> Better ways to structure apps
+	
+	* <https://github.com/onmyway133/ios-architecture>
 
-![CodePath logo](https://raw.githubusercontent.com/RoRoche/iOSSwiftStarter/master/assets/logo_codepath.png)
-
-### iOS Good Practices: <https://github.com/futurice/ios-good-practices>
-
-> Good ideas for iOS development, by Futurice developers. <http://www.futurice.com>
-
-![futurice logo](https://raw.githubusercontent.com/RoRoche/iOSSwiftStarter/master/assets/logo_futurice.png)
-
-### Clean Swift: <http://clean-swift.com/>
-
-### Awesome-Swift-Education: <https://github.com/hsavit1/Awesome-Swift-Education>
-
-> All the resources for Learning About Swift
-
-### Awesome-Apple: <https://github.com/joeljfischer/awesome-apple>
-
-> An opinionated, curated list of awesome libraries, plugins, and resources for Apple platform development
-
-### The Official raywenderlich.com Swift Style Guide: <https://github.com/raywenderlich/swift-style-guide>
-
-> The official Swift style guide for raywenderlich.com.
-
-### ios-architecture: <https://github.com/onmyway133/ios-architecture>
-
-> Better ways to structure apps
-
-### A robust multi-environment build setup: <http://www.theappbusiness.com/blog/a-robust-multi-environment-build-setup>
+* A robust multi-environment build setup
+	
+	* <http://www.theappbusiness.com/blog/a-robust-multi-environment-build-setup>
 
 ## Bibliography
 
