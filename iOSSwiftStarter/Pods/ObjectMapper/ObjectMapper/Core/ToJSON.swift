@@ -66,52 +66,30 @@ private func setValue(value: AnyObject, forKeyPathComponents components: ArraySl
 internal final class ToJSON {
 	
 	class func basicType<N>(field: N, map: Map) {
-		func _setValue(value: AnyObject) {
-			setValue(value, map: map)
-		}
-
-		if let x = field as? NSNumber { // basic types
-			_setValue(x)
-		} else if let x = field as? Bool {
-			_setValue(x)
-		} else if let x = field as? Int {
-			_setValue(x)
-		} else if let x = field as? Double {
-			_setValue(x)
-		} else if let x = field as? Float {
-			_setValue(x)
-		} else if let x = field as? String {
-			_setValue(x)
-		} else if let x = field as? Array<NSNumber> { // Arrays
-			_setValue(x)
-		} else if let x = field as? Array<Bool> {
-			_setValue(x)
-		} else if let x = field as? Array<Int> {
-			_setValue(x)
-		} else if let x = field as? Array<Double> {
-			_setValue(x)
-		} else if let x = field as? Array<Float> {
-			_setValue(x)
-		} else if let x = field as? Array<String> {
-			_setValue(x)
-		} else if let x = field as? Array<AnyObject> {
-			_setValue(x)
-		} else if let x = field as? Array<Dictionary<String, AnyObject>> {
-			_setValue(x)
-		} else if let x = field as? Dictionary<String, NSNumber> { // Dictionaries
-			_setValue(x)
-		} else if let x = field as? Dictionary<String, Bool> {
-			_setValue(x)
-		} else if let x = field as? Dictionary<String, Int> {
-			_setValue(x)
-		} else if let x = field as? Dictionary<String, Double> {
-			_setValue(x)
-		} else if let x = field as? Dictionary<String, Float> {
-			_setValue(x)
-		} else if let x = field as? Dictionary<String, String> {
-			_setValue(x)
-		} else if let x = field as? Dictionary<String, AnyObject> {
-			_setValue(x)
+		if let x = field as? AnyObject where false
+			|| x is NSNumber // Basic types
+			|| x is Bool
+			|| x is Int
+			|| x is Double
+			|| x is Float
+			|| x is String
+			|| x is Array<NSNumber> // Arrays
+			|| x is Array<Bool>
+			|| x is Array<Int>
+			|| x is Array<Double>
+			|| x is Array<Float>
+			|| x is Array<String>
+			|| x is Array<AnyObject>
+			|| x is Array<Dictionary<String, AnyObject>>
+			|| x is Dictionary<String, NSNumber> // Dictionaries
+			|| x is Dictionary<String, Bool>
+			|| x is Dictionary<String, Int>
+			|| x is Dictionary<String, Double>
+			|| x is Dictionary<String, Float>
+			|| x is Dictionary<String, String>
+			|| x is Dictionary<String, AnyObject>
+		{
+			setValue(x, map: map)
 		}
 	}
 
@@ -122,7 +100,7 @@ internal final class ToJSON {
 	}
 
 	class func object<N: Mappable>(field: N, map: Map) {
-		setValue(Mapper().toJSON(field), map: map)
+		setValue(Mapper(context: map.context).toJSON(field), map: map)
 	}
 	
 	class func optionalObject<N: Mappable>(field: N?, map: Map) {
@@ -132,7 +110,7 @@ internal final class ToJSON {
 	}
 
 	class func objectArray<N: Mappable>(field: Array<N>, map: Map) {
-		let JSONObjects = Mapper().toJSONArray(field)
+		let JSONObjects = Mapper(context: map.context).toJSONArray(field)
 		
 		setValue(JSONObjects, map: map)
 	}
@@ -146,7 +124,7 @@ internal final class ToJSON {
 	class func twoDimensionalObjectArray<N: Mappable>(field: Array<Array<N>>, map: Map) {
 		var array = [[[String : AnyObject]]]()
 		for innerArray in field {
-			let JSONObjects = Mapper().toJSONArray(innerArray)
+			let JSONObjects = Mapper(context: map.context).toJSONArray(innerArray)
 			array.append(JSONObjects)
 		}
 		setValue(array, map: map)
@@ -159,7 +137,7 @@ internal final class ToJSON {
 	}
 	
 	class func objectSet<N: Mappable where N: Hashable>(field: Set<N>, map: Map) {
-		let JSONObjects = Mapper().toJSONSet(field)
+		let JSONObjects = Mapper(context: map.context).toJSONSet(field)
 		
 		setValue(JSONObjects, map: map)
 	}
@@ -171,7 +149,7 @@ internal final class ToJSON {
 	}
 	
 	class func objectDictionary<N: Mappable>(field: Dictionary<String, N>, map: Map) {
-		let JSONObjects = Mapper().toJSONDictionary(field)
+		let JSONObjects = Mapper(context: map.context).toJSONDictionary(field)
 		
 		setValue(JSONObjects, map: map)
 	}
@@ -183,7 +161,7 @@ internal final class ToJSON {
     }
 	
 	class func objectDictionaryOfArrays<N: Mappable>(field: Dictionary<String, [N]>, map: Map) {
-		let JSONObjects = Mapper().toJSONDictionaryOfArrays(field)
+		let JSONObjects = Mapper(context: map.context).toJSONDictionaryOfArrays(field)
 
 		setValue(JSONObjects, map: map)
 	}

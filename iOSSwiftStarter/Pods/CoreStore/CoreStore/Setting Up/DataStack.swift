@@ -2,7 +2,7 @@
 //  DataStack.swift
 //  CoreStore
 //
-//  Copyright (c) 2014 John Rommel Estropia
+//  Copyright © 2014 John Rommel Estropia
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -30,29 +30,33 @@ import CoreData
 #endif
 
 
-internal let applicationSupportDirectory = NSFileManager.defaultManager().URLsForDirectory(.ApplicationSupportDirectory, inDomains: .UserDomainMask).first!
+#if os(tvOS)
+    internal let deviceDirectorySearchPath = NSSearchPathDirectory.CachesDirectory
+#else
+    internal let deviceDirectorySearchPath = NSSearchPathDirectory.ApplicationSupportDirectory
+#endif
+
+internal let defaultDirectory = NSFileManager.defaultManager().URLsForDirectory(deviceDirectorySearchPath, inDomains: .UserDomainMask).first!
 
 internal let applicationName = (NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleName") as? String) ?? "CoreData"
 
-internal let defaultSQLiteStoreURL = applicationSupportDirectory.URLByAppendingPathComponent(applicationName, isDirectory: false).URLByAppendingPathExtension("sqlite")
+internal let defaultSQLiteStoreURL = defaultDirectory.URLByAppendingPathComponent(applicationName, isDirectory: false).URLByAppendingPathExtension("sqlite")
 
 
 // MARK: - DataStack
 
 /**
-The `DataStack` encapsulates the data model for the Core Data stack. Each `DataStack` can have multiple data stores, usually specified as a "Configuration" in the model editor. Behind the scenes, the DataStack manages its own `NSPersistentStoreCoordinator`, a root `NSManagedObjectContext` for disk saves, and a shared `NSManagedObjectContext` designed as a read-only model interface for `NSManagedObjects`.
-*/
+ The `DataStack` encapsulates the data model for the Core Data stack. Each `DataStack` can have multiple data stores, usually specified as a "Configuration" in the model editor. Behind the scenes, the DataStack manages its own `NSPersistentStoreCoordinator`, a root `NSManagedObjectContext` for disk saves, and a shared `NSManagedObjectContext` designed as a read-only model interface for `NSManagedObjects`.
+ */
 public final class DataStack {
     
-    // MARK: Public
-    
     /**
-    Initializes a `DataStack` from an `NSManagedObjectModel`.
-    
-    - parameter modelName: the name of the (.xcdatamodeld) model file. If not specified, the application name will be used.
-    - parameter bundle: an optional bundle to load models from. If not specified, the main bundle will be used.
-    - parameter migrationChain: the `MigrationChain` that indicates the sequence of model versions to be used as the order for incremental migration. If not specified, will default to a non-migrating data stack.
-    */
+     Initializes a `DataStack` from an `NSManagedObjectModel`.
+     
+     - parameter modelName: the name of the (.xcdatamodeld) model file. If not specified, the application name will be used.
+     - parameter bundle: an optional bundle to load models from. If not specified, the main bundle will be used.
+     - parameter migrationChain: the `MigrationChain` that indicates the sequence of model versions to be used as the order for progressive migrations. If not specified, will default to a non-migrating data stack.
+     */
     public required init(modelName: String = applicationName, bundle: NSBundle = NSBundle.mainBundle(), migrationChain: MigrationChain = nil) {
         
         CoreStore.assert(
@@ -76,26 +80,26 @@ public final class DataStack {
     }
     
     /**
-    Returns the `DataStack`'s model version. The version string is the same as the name of the version-specific .xcdatamodeld file.
-    */
+     Returns the `DataStack`'s model version. The version string is the same as the name of the version-specific .xcdatamodeld file.
+     */
     public var modelVersion: String {
         
         return self.model.currentModelVersion!
     }
     
     /**
-    Returns the entity name-to-class type mapping from the `DataStack`'s model.
-    */
+     Returns the entity name-to-class type mapping from the `DataStack`'s model.
+     */
     public var entityTypesByName: [String: NSManagedObject.Type] {
         
         return self.model.entityTypesMapping()
     }
     
     /**
-    Returns the `NSEntityDescription` for the specified `NSManagedObject` subclass.
-    */
+     Returns the `NSEntityDescription` for the specified `NSManagedObject` subclass.
+     */
     public func entityDescriptionForType(type: NSManagedObject.Type) -> NSEntityDescription? {
-    
+        
         return NSEntityDescription.entityForName(
             self.model.entityNameForClass(type),
             inManagedObjectContext: self.mainContext
@@ -103,26 +107,26 @@ public final class DataStack {
     }
     
     /**
-    Returns the `NSManagedObjectID` for the specified object URI if it exists in the persistent store.
-    */
+     Returns the `NSManagedObjectID` for the specified object URI if it exists in the persistent store.
+     */
     public func objectIDForURIRepresentation(url: NSURL) -> NSManagedObjectID? {
         
         return self.coordinator.managedObjectIDForURIRepresentation(url)
     }
     
     /**
-    Adds an in-memory store to the stack.
-    
-    - parameter configuration: an optional configuration name from the model file. If not specified, defaults to `nil`.
-    - returns: the `NSPersistentStore` added to the stack.
-    */
+     Adds an in-memory store to the stack.
+     
+     - parameter configuration: an optional configuration name from the model file. If not specified, defaults to `nil`.
+     - returns: the `NSPersistentStore` added to the stack.
+     */
     public func addInMemoryStoreAndWait(configuration configuration: String? = nil) throws -> NSPersistentStore {
         
         let coordinator = self.coordinator;
         
         var store: NSPersistentStore?
         var storeError: NSError?
-        coordinator.performBlockAndWait {
+        coordinator.performSynchronously {
             
             do {
                 
@@ -154,17 +158,17 @@ public final class DataStack {
     }
     
     /**
-    Adds to the stack an SQLite store from the given SQLite file name.
-    
-    - parameter fileName: the local filename for the SQLite persistent store in the "Application Support" directory. A new SQLite file will be created if it does not exist. Note that if you have multiple configurations, you will need to specify a different `fileName` explicitly for each of them.
-    - parameter configuration: an optional configuration name from the model file. If not specified, defaults to `nil`, the "Default" configuration. Note that if you have multiple configurations, you will need to specify a different `fileName` explicitly for each of them.
-    - parameter resetStoreOnModelMismatch: Set to true to delete the store on model mismatch; or set to false to throw exceptions on failure instead. Typically should only be set to true when debugging, or if the persistent store can be recreated easily. If not specified, defaults to false
-    - returns: the `NSPersistentStore` added to the stack.
-    */
+     Adds to the stack an SQLite store from the given SQLite file name.
+     
+     - parameter fileName: the local filename for the SQLite persistent store in the "Application Support" directory (or the "Caches" directory on tvOS). A new SQLite file will be created if it does not exist. Note that if you have multiple configurations, you will need to specify a different `fileName` explicitly for each of them.
+     - parameter configuration: an optional configuration name from the model file. If not specified, defaults to `nil`, the "Default" configuration. Note that if you have multiple configurations, you will need to specify a different `fileName` explicitly for each of them.
+     - parameter resetStoreOnModelMismatch: Set to true to delete the store on model mismatch; or set to false to throw exceptions on failure instead. Typically should only be set to true when debugging, or if the persistent store can be recreated easily. If not specified, defaults to false
+     - returns: the `NSPersistentStore` added to the stack.
+     */
     public func addSQLiteStoreAndWait(fileName fileName: String, configuration: String? = nil, resetStoreOnModelMismatch: Bool = false) throws -> NSPersistentStore {
         
         return try self.addSQLiteStoreAndWait(
-            fileURL: applicationSupportDirectory.URLByAppendingPathComponent(
+            fileURL: defaultDirectory.URLByAppendingPathComponent(
                 fileName,
                 isDirectory: false
             ),
@@ -174,13 +178,13 @@ public final class DataStack {
     }
     
     /**
-    Adds to the stack an SQLite store from the given SQLite file URL.
-    
-    - parameter fileURL: the local file URL for the SQLite persistent store. A new SQLite file will be created if it does not exist. If not specified, defaults to a file URL pointing to a "<Application name>.sqlite" file in the "Application Support" directory. Note that if you have multiple configurations, you will need to specify a different `fileURL` explicitly for each of them.
-    - parameter configuration: an optional configuration name from the model file. If not specified, defaults to `nil`, the "Default" configuration. Note that if you have multiple configurations, you will need to specify a different `fileURL` explicitly for each of them.
-    - parameter resetStoreOnModelMismatch: Set to true to delete the store on model mismatch; or set to false to throw exceptions on failure instead. Typically should only be set to true when debugging, or if the persistent store can be recreated easily. If not specified, defaults to false.
-    - returns: the `NSPersistentStore` added to the stack.
-    */
+     Adds to the stack an SQLite store from the given SQLite file URL.
+     
+     - parameter fileURL: the local file URL for the SQLite persistent store. A new SQLite file will be created if it does not exist. If not specified, defaults to a file URL pointing to a "<Application name>.sqlite" file in the "Application Support" directory (or the "Caches" directory on tvOS). Note that if you have multiple configurations, you will need to specify a different `fileURL` explicitly for each of them.
+     - parameter configuration: an optional configuration name from the model file. If not specified, defaults to `nil`, the "Default" configuration. Note that if you have multiple configurations, you will need to specify a different `fileURL` explicitly for each of them.
+     - parameter resetStoreOnModelMismatch: Set to true to delete the store on model mismatch; or set to false to throw exceptions on failure instead. Typically should only be set to true when debugging, or if the persistent store can be recreated easily. If not specified, defaults to false.
+     - returns: the `NSPersistentStore` added to the stack.
+     */
     public func addSQLiteStoreAndWait(fileURL fileURL: NSURL = defaultSQLiteStoreURL, configuration: String? = nil, resetStoreOnModelMismatch: Bool = false) throws -> NSPersistentStore {
         
         CoreStore.assert(
@@ -216,7 +220,7 @@ public final class DataStack {
         var store: NSPersistentStore?
         var storeError: NSError?
         let options = self.optionsForSQLiteStore()
-        coordinator.performBlockAndWait {
+        coordinator.performSynchronously {
             
             do {
                 
@@ -245,7 +249,7 @@ public final class DataStack {
                 fileManager.removeSQLiteStoreAtURL(fileURL)
                 
                 var store: NSPersistentStore?
-                coordinator.performBlockAndWait {
+                coordinator.performSynchronously {
                     
                     do {
                         
@@ -291,8 +295,18 @@ public final class DataStack {
         let migrationQueue = NSOperationQueue()
         migrationQueue.maxConcurrentOperationCount = 1
         migrationQueue.name = "com.coreStore.migrationOperationQueue"
-        migrationQueue.qualityOfService = .Utility
-        migrationQueue.underlyingQueue = dispatch_queue_create("com.coreStore.migrationQueue", DISPATCH_QUEUE_SERIAL)
+        #if USE_FRAMEWORKS
+            
+            migrationQueue.qualityOfService = .Utility
+            migrationQueue.underlyingQueue = dispatch_queue_create("com.coreStore.migrationQueue", DISPATCH_QUEUE_SERIAL)
+        #else
+            
+            if #available(iOS 8.0, *) {
+                
+                migrationQueue.qualityOfService = .Utility
+                migrationQueue.underlyingQueue = dispatch_queue_create("com.coreStore.migrationQueue", DISPATCH_QUEUE_SERIAL)
+            }
+        #endif
         return migrationQueue
     }()
     
@@ -361,11 +375,17 @@ public final class DataStack {
             self.configurationStoreMapping[configurationName] = persistentStore
             for entityDescription in (self.coordinator.managedObjectModel.entitiesForConfiguration(configurationName) ?? []) {
                 
-                if self.entityConfigurationsMapping[entityDescription.managedObjectClassName] == nil {
+                let managedObjectClassName = entityDescription.managedObjectClassName
+                CoreStore.assert(
+                    NSClassFromString(managedObjectClassName) != nil,
+                    "The class \(typeName(managedObjectClassName)) for the entity \(typeName(entityDescription.name)) does not exist. Check if the subclass type and module name are properly configured."
+                )
+                
+                if self.entityConfigurationsMapping[managedObjectClassName] == nil {
                     
-                    self.entityConfigurationsMapping[entityDescription.managedObjectClassName] = []
+                    self.entityConfigurationsMapping[managedObjectClassName] = []
                 }
-                self.entityConfigurationsMapping[entityDescription.managedObjectClassName]?.insert(configurationName)
+                self.entityConfigurationsMapping[managedObjectClassName]?.insert(configurationName)
             }
         }
     }
@@ -379,9 +399,16 @@ public final class DataStack {
     
     deinit {
         
-        for store in self.coordinator.persistentStores {
+        let coordinator = self.coordinator
+        coordinator.performAsynchronously {
             
-            _ = try? self.coordinator.removePersistentStore(store)
+            withExtendedLifetime(coordinator) { coordinator in
+                
+                coordinator.persistentStores.forEach {
+                    
+                    _ = try? coordinator.removePersistentStore($0)
+                }
+            }
         }
     }
 }

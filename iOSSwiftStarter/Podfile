@@ -3,9 +3,13 @@ platform :ios, '8.0'
 # Uncomment this line if you're using Swift
 use_frameworks!
 
-target 'iOSSwiftStarter' do
-    pod 'Alamofire', '~> 3.0'
+def abstract_pods
     pod 'ObjectMapper', '~> 1.0'
+end
+
+target 'iOSSwiftStarter' do
+    abstract_pods
+    pod 'Alamofire', '~> 3.0'
     pod 'AlamofireObjectMapper', '~> 2.1'
     pod 'ReactKit'
     pod 'Kugel'
@@ -17,8 +21,9 @@ target 'iOSSwiftStarter' do
 end
 
 def testing_pods
-    pod 'Quick', '~> 0.8.0'
-    pod 'Nimble', '3.0.0'
+    abstract_pods
+    pod 'Quick'
+    pod 'Nimble'
 end
 
 target 'iOSSwiftStarterTests' do
@@ -26,5 +31,4 @@ target 'iOSSwiftStarterTests' do
 end
 
 target 'iOSSwiftStarterUITests' do
-    testing_pods
 end

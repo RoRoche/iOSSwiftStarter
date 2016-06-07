@@ -2,7 +2,7 @@
 //  NSManagedObjectContext+Transaction.swift
 //  CoreStore
 //
-//  Copyright (c) 2015 John Rommel Estropia
+//  Copyright © 2015 John Rommel Estropia
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -55,6 +55,26 @@ internal extension NSManagedObjectContext {
         }
     }
     
+    internal var isSavingSynchronously: Bool? {
+        
+        get {
+            
+            let value: NSNumber? = getAssociatedObjectForKey(
+                &PropertyKeys.isSavingSynchronously,
+                inObject: self
+            )
+            return value?.boolValue
+        }
+        set {
+            
+            setAssociatedWeakObject(
+                newValue.flatMap { NSNumber(bool: $0) },
+                forKey: &PropertyKeys.isSavingSynchronously,
+                inObject: self
+            )
+        }
+    }
+    
     internal func isRunningInAllowedQueue() -> Bool {
         
         guard let parentTransaction = self.parentTransaction else {
@@ -80,7 +100,7 @@ internal extension NSManagedObjectContext {
         
         var result = SaveResult(hasChanges: false)
         
-        self.performBlockAndWait { [unowned self] () -> Void in
+        self.performBlockAndWait {
             
             guard self.hasChanges else {
                 
@@ -89,7 +109,9 @@ internal extension NSManagedObjectContext {
             
             do {
                 
+                self.isSavingSynchronously = true
                 try self.save()
+                self.isSavingSynchronously = nil
             }
             catch {
                 
@@ -124,7 +146,7 @@ internal extension NSManagedObjectContext {
     
     internal func saveAsynchronouslyWithCompletion(completion: ((result: SaveResult) -> Void) = { _ in }) {
         
-        self.performBlock { () -> Void in
+        self.performBlock {
             
             guard self.hasChanges else {
                 
@@ -137,7 +159,9 @@ internal extension NSManagedObjectContext {
             
             do {
                 
+                self.isSavingSynchronously = false
                 try self.save()
+                self.isSavingSynchronously = nil
             }
             catch {
                 
@@ -167,11 +191,24 @@ internal extension NSManagedObjectContext {
         }
     }
     
+    internal func refreshAndMergeAllObjects() {
+        
+        if #available(iOS 8.3, OSX 10.11, *) {
+            
+            self.refreshAllObjects()
+        }
+        else {
+            
+            self.registeredObjects.forEach { self.refreshObject($0, mergeChanges: true) }
+        }
+    }
+    
     
     // MARK: Private
     
     private struct PropertyKeys {
         
         static var parentTransaction: Void?
+        static var isSavingSynchronously: Void?
     }
 }

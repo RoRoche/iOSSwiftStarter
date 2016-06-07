@@ -2,7 +2,7 @@
 //  NSManagedObjectModel+Setup.swift
 //  CoreStore
 //
-//  Copyright (c) 2015 John Rommel Estropia
+//  Copyright © 2015 John Rommel Estropia
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -154,12 +154,13 @@ internal extension NSManagedObjectModel {
     }
     
     @nonobjc internal func entityTypesMapping() -> [String: NSManagedObject.Type] {
-    
-        return self.entityNameMapping.reduce([:]) { (var mapping, pair) in
+        
+        var mapping = [String: NSManagedObject.Type]()
+        self.entityNameMapping.forEach { (className, entityName) in
             
-            mapping[pair.1] = (NSClassFromString(pair.0)! as! NSManagedObject.Type)
-            return mapping
+            mapping[entityName] = (NSClassFromString(className)! as! NSManagedObject.Type)
         }
+        return mapping
     }
     
     @nonobjc internal func mergedModels() -> [NSManagedObjectModel] {
@@ -249,15 +250,16 @@ internal extension NSManagedObjectModel {
                 return mapping as! [String: String]
             }
             
-            let mapping = self.entities.reduce([String: String]()) {
-                (var mapping, entityDescription) -> [String: String] in
+            var mapping = [String: String]()
+            self.entities.forEach {
                 
-                if let entityName = entityDescription.name {
+                guard let entityName = $0.name else {
                     
-                    let className = entityDescription.managedObjectClassName
-                    mapping[className] = entityName
+                    return
                 }
-                return mapping
+                
+                let className = $0.managedObjectClassName
+                mapping[className] = entityName
             }
             setAssociatedCopiedObject(
                 mapping as NSDictionary,

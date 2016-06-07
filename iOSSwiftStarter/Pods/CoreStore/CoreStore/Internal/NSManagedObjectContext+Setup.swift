@@ -2,7 +2,7 @@
 //  NSManagedObjectContext+Setup.swift
 //  CoreStore
 //
-//  Copyright (c) 2015 John Rommel Estropia
+//  Copyright © 2015 John Rommel Estropia
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -82,14 +82,28 @@ internal extension NSManagedObjectContext {
             object: rootContext,
             closure: { [weak context] (note) -> Void in
                 
-                context?.performBlock { () -> Void in
+                guard let rootContext = note.object as? NSManagedObjectContext,
+                    let context = context else {
+                        
+                        return
+                }
+                let mergeChanges = { () -> Void in
                     
                     let updatedObjects = (note.userInfo?[NSUpdatedObjectsKey] as? Set<NSManagedObject>) ?? []
                     for object in updatedObjects {
                         
-                        context?.objectWithID(object.objectID).willAccessValueForKey(nil)
+                        context.objectWithID(object.objectID).willAccessValueForKey(nil)
                     }
-                    context?.mergeChangesFromContextDidSaveNotification(note)
+                    context.mergeChangesFromContextDidSaveNotification(note)
+                }
+                
+                if rootContext.isSavingSynchronously == true {
+                    
+                    context.performBlockAndWait(mergeChanges)
+                }
+                else {
+                    
+                    context.performBlock(mergeChanges)
                 }
             }
         )

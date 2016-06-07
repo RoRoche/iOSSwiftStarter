@@ -2,7 +2,7 @@
 //  NotificationObserver.swift
 //  CoreStore
 //
-//  Copyright (c) 2014 John Rommel Estropia
+//  Copyright © 2014 John Rommel Estropia
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -36,14 +36,14 @@ internal final class NotificationObserver {
     let object: AnyObject?
     let observer: NSObjectProtocol
     
-    init(notificationName: String, object: AnyObject?, closure: (note: NSNotification) -> Void) {
+    init(notificationName: String, object: AnyObject?, queue: NSOperationQueue? = nil, closure: (note: NSNotification) -> Void) {
         
         self.notificationName = notificationName
         self.object = object
         self.observer = NSNotificationCenter.defaultCenter().addObserverForName(
             notificationName,
             object: object,
-            queue: nil,
+            queue: queue,
             usingBlock: closure
         )
     }

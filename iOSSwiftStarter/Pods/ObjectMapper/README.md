@@ -9,11 +9,13 @@ ObjectMapper is a framework written in Swift that makes it easy for you to conve
 - [Features](#features)
 - [The Basics](#the-basics)
 - [Mapping Nested Objects](#easy-mapping-of-nested-objects)
-- [Custom Transformations](#custom-transfoms)
+- [Custom Transformations](#custom-transforms)
 - [Subclassing](#subclasses)
 - [Generic Objects](#generic-objects)
+- [Mapping Context](#mapping-context)
 - [ObjectMapper + Alamofire](#objectmapper--alamofire) 
 - [ObjectMapper + Realm](#objectmapper--realm)
+- [To Do](#to-do)
 - [Contributing](#contributing)
 - [Installation](#installation)
 
@@ -28,8 +30,9 @@ ObjectMapper is a framework written in Swift that makes it easy for you to conve
 To support mapping, a class or struct just needs to implement the ```Mappable``` protocol.
 ```swift
 public protocol Mappable {
-	init?(_ map: Map)
+    init?(_ map: Map)
     mutating func mapping(map: Map)
+    static func objectForMapping(map: Map) -> Mappable? // Optional
 }
 ```
 ObjectMapper uses the ```<-``` operator to define how each member variable maps to and from JSON.
@@ -45,9 +48,9 @@ class User: Mappable {
     var friends: [User]?                        // Array of Users
     var birthday: NSDate?
 
-	required init?(_ map: Map) {
+    required init?(_ map: Map) {
 
-	}
+    }
 
     // Mappable
     func mapping(map: Map) {
@@ -90,22 +93,46 @@ let JSONString = Mapper().toJSONString(user, prettyPrint: true)
 ```
 
 ObjectMapper can map classes composed of the following types:
-- Int
-- Bool
-- Double
-- Float
-- String
-- RawRepresentable (Enums)
-- Array\<AnyObject\>
-- Dictionary\<String, AnyObject\>
-- Object\<T: Mappable\>
-- Array\<T: Mappable\>
-- Array\<Array\<T: Mappable\>\>
-- Set\<T: Mappable\> 
-- Dictionary\<String, T: Mappable\>
-- Dictionary\<String, Array\<T: Mappable\>\>
+- `Int`
+- `Bool`
+- `Double`
+- `Float`
+- `String`
+- `RawRepresentable` (Enums)
+- `Array<AnyObject>`
+- `Dictionary<String, AnyObject>`
+- `Object<T: Mappable>`
+- `Array<T: Mappable>`
+- `Array<Array<T: Mappable>>`
+- `Set<T: Mappable>` 
+- `Dictionary<String, T: Mappable>`
+- `Dictionary<String, Array<T: Mappable>>`
 - Optionals of all the above
 - Implicitly Unwrapped Optionals of the above
+
+## `Mappable` Protocol
+
+#### `init?(_ map: Map)` 
+This failable initializer can be used for JSON validation prior to object serialization. Returning nil within the function will prevent the mapping from occuring. You can inspect the JSON stored within the `Map` object to do your validation. See two approaches to do this below:
+```
+required init?(_ map: Map){
+	// check if a required "name" property exists within the JSON.
+	if map["name"].value() == nil {
+		return nil
+	}
+	if map.JSONDictionary["name"] == nil {
+		return nil
+	}
+}
+```
+
+#### `mutating func mapping(map: Map)` 
+This function is where all mapping definitions should go. When parsing JSON, it is executed after a successful object initialization. When generating JSON, it is the only function that is called on the object.
+
+#### `static func objectForMapping(map: Map) -> Mappable?` 
+This is an optional function. If it is implemented, `init?(_ map: Map)` will no longer be called by ObjectMapper. This function should be used to:
+- provide an existing cached object to be used for mapping
+- return an object of another type (which also conforms to Mappable) to be used for mapping. For instance, you may inspect the JSON to infer the type of object that should be used for mapping ([see example](https://github.com/Hearst-DD/ObjectMapper/blob/master/ObjectMapperTests/ClassClusterTests.swift#L62))
 
 # Easy Mapping of Nested Objects
 ObjectMapper supports dot notation within keys for easy mapping of nested objects. Given the following JSON String:
@@ -225,36 +252,34 @@ class Result<T: Mappable>: Mappable {
 
 let result = Mapper<Result<User>>().map(JSON)
 ```
-<!-- # Mapping Immutable Properties
 
-Note: This is an experimental feature. Not all ObjectMapper functionality is guaranteed to work for immutable mappings.
+# Mapping Context
 
-If you have a class or struct whose properties are immutable (`let`) and want to map it using ObjectMapper, you can use the following approach.
+The `Map` object which is passed around during mapping, has an optional `MapContext` object that is available for developers to use if they need to pass information around during mapping. 
 
-In the failable initializer, assign values to your properties using the `valueOrFail()` function on the `map` object. Once all properties are set, check `isValid` to determine if the mapping succeeded for all properties. If `isValid` returns false, return `nil` to indicate that initialization failed.
-
-```swift
-class Model: Mappable {
-    let name: String // Non-optional property
-
-    required init?(_ map: Map) {
-        name = map["name"].valueOrFail()
-
-        if !map.isValid {
-            return nil
-        }
-    }
-
-    func mapping(map: Map) {
-    }
+To take advantage of this feature, simple create an object that implments `MapContext` (which is an empty protocol) and pass it into `Mapper` during initialization. 
+```
+struct Context: MapContext {
+	var importantMappingInfo = "Info that I need during mapping"
 }
 
-if let model = Mapper<Model>().map(JSONString) {
-    // Now we have valid model.
-} else {
-    // Something wrong...
+class User: Mappable {
+	var name: String?
+	
+	required init?(_ map: Map){
+	
+	}
+	
+	func mapping(map: Map){
+		if let context = map.context as? Context {
+			// use context to make decisions about mapping
+		}
+	}
 }
-``` -->
+
+let context = Context()
+let user = Mapper<User>(context: context).map(JSONString)
+```
 
 #ObjectMapper + Alamofire
 
@@ -281,7 +306,10 @@ class Model: Object, Mappable {
 
 Note: Generating a JSON string of a Realm Object using ObjectMappers' `toJSON` function only works within a Realm write transaction. This is caused because ObjectMapper uses the `inout` flag in its mapping functions (`<-`) which are used both for serializing and deserializing. Realm detects the flag and forces the `toJSON` function to be called within a write block even though the objects are not being modified.
 
-<!-- ##To Do -->
+# To Do
+- Improve error handling. Perhaps using `throws`
+- Class cluster documentation
+- Realm List Transform
 
 # Contributing
 
@@ -293,12 +321,12 @@ Before submitting any pull request, please ensure you have run the included test
 ObjectMapper can be added to your project using [CocoaPods 0.36 or later](http://blog.cocoapods.org/Pod-Authors-Guide-to-CocoaPods-Frameworks/) by adding the following line to your `Podfile`:
 
 ```ruby
-pod 'ObjectMapper', '~> 1.1'
+pod 'ObjectMapper', '~> 1.2'
 ```
 
 If you're using [Carthage](https://github.com/Carthage/Carthage) you can add a dependency on ObjectMapper by adding it to your `Cartfile`:
 ```
-github "Hearst-DD/ObjectMapper" ~> 1.1
+github "Hearst-DD/ObjectMapper" ~> 1.2
 ```
 
 Otherwise, ObjectMapper can be added as a submodule:

@@ -50,7 +50,7 @@ class ListRepoModuleView: UIViewController, StatefulViewController, ListRepoModu
         let refreshControl: UIRefreshControl = UIRefreshControl();
         
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh");
-        refreshControl.addTarget(self, action: "onPulledToRefresh:", forControlEvents: UIControlEvents.ValueChanged);
+        refreshControl.addTarget(self, action: #selector(ListRepoModuleView.onPulledToRefresh(_:)), forControlEvents: UIControlEvents.ValueChanged);
         
         return refreshControl;
     }();
@@ -70,7 +70,7 @@ class ListRepoModuleView: UIViewController, StatefulViewController, ListRepoModu
     }
     
     override func viewWillAppear(animated: Bool) {
-        hakuba.deselectAllCells();
+        hakuba.deselectAllCells(animated: true);
         super.viewWillAppear(animated);
     }
     
@@ -90,7 +90,7 @@ class ListRepoModuleView: UIViewController, StatefulViewController, ListRepoModu
         
         // configure Hakuba
         hakuba = Hakuba(tableView: tableView);
-        hakuba.registerNibForCellClass(RepoCell);
+        hakuba.registerCellByNib(RepoCell);
         hakuba.cellEditable = false;
     }
     
@@ -152,8 +152,17 @@ class ListRepoModuleView: UIViewController, StatefulViewController, ListRepoModu
             cellModels.append(cellModel);
         }
         
-        self.hakuba[0].reset(cellModels)
-            .slide(.Fade);
+        if(self.hakuba.sectionsCount > 0) {
+            self.hakuba[0].reset(cellModels)
+                .bump();
+        } else {
+            let section = Section();
+            hakuba
+                .insert(section, atIndex: 1)
+                .bump();
+            self.hakuba[0].append(cellModels)
+                .bump();
+        }
         
         if(self.data.count > 0) {
             stateMachine.transitionToState(.View(ViewState.Content.value), animated: true);

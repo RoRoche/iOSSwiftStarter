@@ -2,7 +2,7 @@
 //  UnsafeDataTransaction.swift
 //  CoreStore
 //
-//  Copyright (c) 2015 John Rommel Estropia
+//  Copyright © 2015 John Rommel Estropia
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -37,17 +37,15 @@ public typealias DetachedDataTransaction = UnsafeDataTransaction
 // MARK: - UnsafeDataTransaction
 
 /**
-The `UnsafeDataTransaction` provides an interface for non-contiguous `NSManagedObject` creates, updates, and deletes. This is useful for making temporary changes, such as partially filled forms. An unsafe transaction object should typically be only used from the main queue.
-*/
+ The `UnsafeDataTransaction` provides an interface for non-contiguous `NSManagedObject` creates, updates, and deletes. This is useful for making temporary changes, such as partially filled forms. An unsafe transaction object should typically be only used from the main queue.
+ */
 public final class UnsafeDataTransaction: BaseDataTransaction {
     
-    // MARK: Public
-    
     /**
-    Saves the transaction changes asynchronously. For a `UnsafeDataTransaction`, multiple commits are allowed, although it is the developer's responsibility to ensure a reasonable leeway to prevent blocking the main thread.
-    
-    - parameter completion: the block executed after the save completes. Success or failure is reported by the `SaveResult` argument of the block.
-    */
+     Saves the transaction changes asynchronously. For a `UnsafeDataTransaction`, multiple commits are allowed, although it is the developer's responsibility to ensure a reasonable leeway to prevent blocking the main thread.
+     
+     - parameter completion: the block executed after the save completes. Success or failure is reported by the `SaveResult` argument of the block.
+     */
     public func commit(completion: (result: SaveResult) -> Void) {
         
         self.context.saveAsynchronouslyWithCompletion { (result) -> Void in
@@ -55,6 +53,18 @@ public final class UnsafeDataTransaction: BaseDataTransaction {
             self.result = result
             completion(result: result)
         }
+    }
+    
+    /**
+     Saves the transaction changes and waits for completion synchronously. For a `UnsafeDataTransaction`, multiple commits are allowed, although it is the developer's responsibility to ensure a reasonable leeway to prevent blocking the main thread.
+     
+     - returns: a `SaveResult` containing the success or failure information
+     */
+    public func commitAndWait() -> SaveResult {
+        
+        let result = self.context.saveSynchronously()
+        self.result = result
+        return result
     }
     
     /**
@@ -79,6 +89,30 @@ public final class UnsafeDataTransaction: BaseDataTransaction {
             "Attempted to undo a \(typeName(self)) with Undo support disabled."
         )
         self.context.undo()
+    }
+    
+    /**
+     Immediately flushes all pending changes to the transaction's observers. This is useful in conjunction with `ListMonitor`s and `ObjectMonitor`s created from `UnsafeDataTransaction`s used to manage temporary "scratch" data.
+     
+     - Important: Note that unlike `commit()`, `flush()` does not propagate/save updates to the `DataStack` and the persistent store. However, the flushed changes will be seen by children transactions created further from the current transaction (i.e. through `transaction.beginUnsafe()`)
+     - throws: an error thrown from `closure`, or an error thrown by Core Data (usually validation errors or conflict errors)
+     */
+    public func flush() {
+        
+        self.context.processPendingChanges()
+    }
+    
+    /**
+     Flushes all pending changes to the transaction's observers at the end of the `closure`'s execution. This is useful in conjunction with `ListMonitor`s and `ObjectMonitor`s created from `UnsafeDataTransaction`s used to manage temporary "scratch" data.
+     
+     - Important: Note that unlike `commit()`, `flush()` does not propagate/save updates to the `DataStack` and the persistent store. However, the flushed changes will be seen by children transactions created further from the current transaction (i.e. through `transaction.beginUnsafe()`)
+     - parameter closure: the closure where changes can be made prior to the flush
+     - throws: an error thrown from `closure`, or an error thrown by Core Data (usually validation errors or conflict errors)
+     */
+    public func flush(@noescape closure: () throws -> Void) rethrows {
+        
+        try closure()
+        self.context.processPendingChanges()
     }
     
     /**
@@ -112,7 +146,7 @@ public final class UnsafeDataTransaction: BaseDataTransaction {
     /**
      Returns the `NSManagedObjectContext` for this unsafe transaction. Use only for cases where external frameworks need an `NSManagedObjectContext` instance to work with.
      
-     Note that it is the developer's responsibility to ensure the following:
+     - Important: Note that it is the developer's responsibility to ensure the following:
      - that the `UnsafeDataTransaction` that owns this context should be strongly referenced and prevented from being deallocated during the context's lifetime
      - that all saves will be done either through the `UnsafeDataTransaction`'s `commit(...)` method, or by calling `save()` manually on the context, its parent, and all other ancestor contexts if there are any.
      */

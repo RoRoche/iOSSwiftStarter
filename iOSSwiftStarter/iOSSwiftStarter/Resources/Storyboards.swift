@@ -15,8 +15,8 @@ extension UIStoryboard {
         }
         return nil
     }
-}
 
+}
 
 protocol Storyboard {
     static var storyboard: UIStoryboard { get }

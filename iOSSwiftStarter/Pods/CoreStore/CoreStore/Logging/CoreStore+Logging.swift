@@ -2,7 +2,7 @@
 //  CoreStore+Logging.swift
 //  CoreStore
 //
-//  Copyright (c) 2015 John Rommel Estropia
+//  Copyright © 2015 John Rommel Estropia
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -30,8 +30,6 @@ import Foundation
 
 public extension CoreStore {
     
-    // MARK: Public
-    
     /**
     The `CoreStoreLogger` instance to be used. The default logger is an instance of a `DefaultLogger`.
     */
@@ -40,7 +38,7 @@ public extension CoreStore {
     
     // MARK: Internal
     
-    internal static func log(level: LogLevel, message: String, fileName: StaticString = __FILE__, lineNumber: Int = __LINE__, functionName: StaticString = __FUNCTION__) {
+    internal static func log(level: LogLevel, message: String, fileName: StaticString = #file, lineNumber: Int = #line, functionName: StaticString = #function) {
         
         self.logger.log(
             level: level,
@@ -51,7 +49,7 @@ public extension CoreStore {
         )
     }
     
-    internal static func handleError(error: NSError, _ message: String, fileName: StaticString = __FILE__, lineNumber: Int = __LINE__, functionName: StaticString = __FUNCTION__) {
+    internal static func handleError(error: NSError, _ message: String, fileName: StaticString = #file, lineNumber: Int = #line, functionName: StaticString = #function) {
         
         self.logger.handleError(
             error: error,
@@ -62,7 +60,7 @@ public extension CoreStore {
         )
     }
     
-    internal static func assert(@autoclosure condition: () -> Bool, _ message: String, fileName: StaticString = __FILE__, lineNumber: Int = __LINE__, functionName: StaticString = __FUNCTION__) {
+    internal static func assert(@autoclosure condition: () -> Bool, _ message: String, fileName: StaticString = #file, lineNumber: Int = #line, functionName: StaticString = #function) {
         
         self.logger.assert(
             condition,

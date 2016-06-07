@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1509" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="RMx-3f-FxP">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="RMx-3f-FxP">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -21,7 +21,7 @@
         <!--Detail-->
         <scene sceneID="yUG-lL-AsK">
             <objects>
-                <viewController storyboardIdentifier="DetailRepoModuleView" title="Detail" id="JEX-9P-axG" customClass="DetailRepoModuleView" customModule="POC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="DetailRepoModuleView" title="Detail" id="JEX-9P-axG" customClass="DetailRepoModuleView" customModule="iOSSwiftStarter" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="SYR-Wa-9uf"/>
                         <viewControllerLayoutGuide type="bottom" id="GAO-Cl-Wes"/>
@@ -58,7 +58,7 @@
         <!--Master-->
         <scene sceneID="RXZ-9u-J8y">
             <objects>
-                <viewController storyboardIdentifier="ListRepoModuleView" title="Master" id="hKF-Bd-1zP" userLabel="Master" customClass="ListRepoModuleView" customModule="POC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ListRepoModuleView" title="Master" id="hKF-Bd-1zP" userLabel="Master" customClass="ListRepoModuleView" customModule="iOSSwiftStarter" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="mDO-Sl-t5g"/>
                         <viewControllerLayoutGuide type="bottom" id="unw-RJ-DLS"/>
