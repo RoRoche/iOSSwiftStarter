@@ -1305,6 +1305,10 @@ What we've got is a robust arsenal of components that are interchangeable if nee
 	
 	* <http://www.theappbusiness.com/blog/a-robust-multi-environment-build-setup>
 
+* Documenting Your Swift Code in Xcode Using Markdown
+    
+    * <http://www.appcoda.com/swift-markdown/>
+
 ## Bibliography
 
 * ActiveRecord pattern:
