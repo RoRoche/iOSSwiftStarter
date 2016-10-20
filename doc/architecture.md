@@ -1309,6 +1309,10 @@ What we've got is a robust arsenal of components that are interchangeable if nee
 
     * <http://www.appcoda.com/swift-markdown/>
 
+* Grok Swift
+
+    * <https://grokswift.com/>
+
 ## Bibliography
 
 * ActiveRecord pattern:
